@@ -178,6 +178,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b36133a9fface541a901bd56e387f6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tilemap: {fileID: 2077561192}
+  snakeHeadTile: {fileID: 11400000, guid: 72312c678ba0b604e94e7e1ab68ab91f, type: 2}
+  snakeBodyTile: {fileID: 11400000, guid: 61593c54d5a99b349a4f3f89e726de23, type: 2}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0

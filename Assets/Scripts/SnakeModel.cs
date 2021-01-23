@@ -1,22 +1,30 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
+
 public class SnakeModel
 {
 
-    public Vector2 FacingDirection { get; set; }
-    private List<Vector2> _positions;
+    public Vector2Int FacingDirection { get; set; }
+    private List<Vector2Int> _positions;
 
-    public SnakeModel(Vector2 facingDirection, ICollection<Vector2> initialCoordinates)
+    public SnakeModel(Vector2Int facingDirection, ICollection<Vector2Int> initialCoordinates)
     {
-        _positions = new List<Vector2>(initialCoordinates);
+        _positions = new List<Vector2Int>(initialCoordinates);
         this.FacingDirection = facingDirection;
     }
 
-    public List<Vector2> MoveForward()
+
+    public List<Vector2Int> GetCurrentPosition()
     {
-        Vector2[] result = new Vector2[_positions.Count];
-        Vector2 prevHeadPos = Vector2.zero;
+        return new List<Vector2Int>(_positions);
+    }
+
+    public List<Vector2Int> MoveForward()
+    {
+        Vector2Int[] result = new Vector2Int[_positions.Count];
+        Vector2Int prevHeadPos = Vector2Int.zero;
         for (int i = 0; i < _positions.Count; i++)
         {
             
@@ -42,7 +50,7 @@ public class SnakeModel
             
         }
 
-        _positions = new List<Vector2>(result);
-        return new List<Vector2>(result);
+        _positions = new List<Vector2Int>(result);
+        return new List<Vector2Int>(result);
     }
 }

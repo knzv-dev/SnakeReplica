@@ -7,11 +7,11 @@ public class SnakeModel
 {
 
     public Vector2Int FacingDirection { get; set; }
-    private List<Vector2Int> _positions;
+    private LinkedList<Vector2Int> _positions;
 
     public SnakeModel(Vector2Int facingDirection, ICollection<Vector2Int> initialCoordinates)
     {
-        _positions = new List<Vector2Int>(initialCoordinates);
+        _positions = new LinkedList<Vector2Int>(initialCoordinates);
         this.FacingDirection = facingDirection;
     }
 
@@ -23,34 +23,19 @@ public class SnakeModel
 
     public List<Vector2Int> MoveForward()
     {
-        Vector2Int[] result = new Vector2Int[_positions.Count];
-        Vector2Int prevHeadPos = Vector2Int.zero;
-        for (int i = 0; i < _positions.Count; i++)
+        if (_positions.Count > 1)
         {
-            
-            if (i == 0)
-            {
-                prevHeadPos = _positions[i];
-                result[i] = _positions[i] + FacingDirection;
-                continue;
-            }
-            if (_positions.Count > 1)
-            {
-                if (i != _positions.Count - 1)
-                {
-                    result[i + 1] = _positions[i];
-                }
-                else
-                {
-                    
-                    result[1] = prevHeadPos;
-                    
-                }
-            }
-            
+            Vector2Int prevHead = _positions.First.Value;
+
+            _positions.First.Value += FacingDirection;
+            _positions.Remove(_positions.Last);
+            _positions.AddAfter(_positions.First, prevHead);
+        } else
+        {
+            _positions.First.Value += FacingDirection;
         }
 
-        _positions = new List<Vector2Int>(result);
-        return new List<Vector2Int>(result);
+
+        return new List<Vector2Int>(_positions);
     }
 }

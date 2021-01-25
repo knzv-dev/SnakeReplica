@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class SnakeService : MonoBehaviour, IMovable
+public class SnakeService : MonoBehaviour, IMovable, IDamageable, IGrowable
 {
     public Vector2Int currentDirection = Vector2Int.up;
 
@@ -14,6 +14,12 @@ public class SnakeService : MonoBehaviour, IMovable
     private Tile headTile;
     [SerializeField]
     private Tile bodyTile;
+    [SerializeField]
+    private Tile wallTile;
+    [SerializeField]
+    private Tile foodTile;
+
+    private int health = 1;
 
     private SnakeModel snakeModel;
 
@@ -49,9 +55,24 @@ public class SnakeService : MonoBehaviour, IMovable
 
     public void Move()
     {
-        List<Vector2Int> prevPosition = snakeModel.GetCurrentPosition();
-        List<Vector2Int> newPosition = snakeModel.MoveForward();
-        RedrawSnake(prevPosition, newPosition);
+        if (health > 0)
+        {
+            List<Vector2Int> prevPosition = snakeModel.GetCurrentPosition();
+            Vector2Int nextHeadPosition = prevPosition[0] + snakeModel.FacingDirection;
+            Tile nextTile = tilemap.GetTile<Tile>(new Vector3Int(nextHeadPosition.x, nextHeadPosition.y, 0));
+            if (nextTile == wallTile)
+            {
+                TakeDamage(1);
+            } else if (nextTile == foodTile)
+            {
+                Grow();
+            }
+            List<Vector2Int> newPosition = snakeModel.MoveForward();
+            RedrawSnake(prevPosition, newPosition);
+        } else
+        {
+            Debug.Log("You DEAD :)");
+        }
     }
 
     public void ChangeDirection(Vector2Int direction)
@@ -82,5 +103,15 @@ public class SnakeService : MonoBehaviour, IMovable
                 tilemap.SetTile(position, bodyTile);
             }
         }
+    }
+
+    public void TakeDamage(int amount)
+    {
+        health -= 1;
+    }
+
+    public void Grow()
+    {
+        snakeModel.ShouldGrowOnNextMove();
     }
 }

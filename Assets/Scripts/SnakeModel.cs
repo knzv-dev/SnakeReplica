@@ -8,6 +8,7 @@ public class SnakeModel
 
     public Vector2Int FacingDirection { get; set; }
     private LinkedList<Vector2Int> _positions;
+    private bool _shouldGrowOnNextMove = false;
 
     public SnakeModel(Vector2Int facingDirection, ICollection<Vector2Int> initialCoordinates)
     {
@@ -23,6 +24,11 @@ public class SnakeModel
 
     public List<Vector2Int> MoveForward()
     {
+        if (_shouldGrowOnNextMove)
+        {
+            _positions.AddLast(new Vector2Int(0, 0));
+            _shouldGrowOnNextMove = false;
+        }
         if (_positions.Count > 1)
         {
             Vector2Int prevHead = _positions.First.Value;
@@ -37,5 +43,15 @@ public class SnakeModel
 
 
         return new List<Vector2Int>(_positions);
+    }
+
+    internal void ShouldGrowOnNextMove()
+    {
+        _shouldGrowOnNextMove = true;
+    }
+
+    private void Grow()
+    {
+
     }
 }

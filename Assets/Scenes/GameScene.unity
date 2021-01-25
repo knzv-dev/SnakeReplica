@@ -283,6 +283,8 @@ MonoBehaviour:
   tilemap: {fileID: 2077561192}
   headTile: {fileID: 11400000, guid: 72312c678ba0b604e94e7e1ab68ab91f, type: 2}
   bodyTile: {fileID: 11400000, guid: 61593c54d5a99b349a4f3f89e726de23, type: 2}
+  wallTile: {fileID: 11400000, guid: fd89591328658f542b1dcc3bb9f1694c, type: 2}
+  foodTile: {fileID: 11400000, guid: b041ac1e27ca61e4797234172ee541e1, type: 2}
 --- !u!4 &1102628101
 Transform:
   m_ObjectHideFlags: 0

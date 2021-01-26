@@ -7,6 +7,7 @@ using UnityEngine.Tilemaps;
 public class SnakeService : MonoBehaviour, IMovable, IDamageable, IGrowable
 {
     public Vector2Int currentDirection = Vector2Int.up;
+    public FoodGenerator foodGenerator;
 
     [SerializeField]
     private Tilemap tilemap;
@@ -20,6 +21,7 @@ public class SnakeService : MonoBehaviour, IMovable, IDamageable, IGrowable
     private Tile foodTile;
 
     private int health = 1;
+    private bool isNotBlocked;
 
     private SnakeModel snakeModel;
 
@@ -27,6 +29,7 @@ public class SnakeService : MonoBehaviour, IMovable, IDamageable, IGrowable
     {
         List<Vector2Int> snakePos = ExtractSnakeCoordinates(tilemap, headTile, bodyTile);
         snakeModel = new SnakeModel(currentDirection, snakePos);
+        foodGenerator.PlaceFood();
     }
 
     private List<Vector2Int> ExtractSnakeCoordinates(Tilemap tilemap, Tile headTile, Tile bodyTile)
@@ -55,17 +58,19 @@ public class SnakeService : MonoBehaviour, IMovable, IDamageable, IGrowable
 
     public void Move()
     {
+        isNotBlocked = true;
         if (health > 0)
         {
             List<Vector2Int> prevPosition = snakeModel.GetCurrentPosition();
             Vector2Int nextHeadPosition = prevPosition[0] + snakeModel.FacingDirection;
             Tile nextTile = tilemap.GetTile<Tile>(new Vector3Int(nextHeadPosition.x, nextHeadPosition.y, 0));
-            if (nextTile == wallTile)
+            if (nextTile == wallTile || nextTile == bodyTile)
             {
                 TakeDamage(1);
             } else if (nextTile == foodTile)
             {
                 Grow();
+                foodGenerator.PlaceFood();
             }
             List<Vector2Int> newPosition = snakeModel.MoveForward();
             RedrawSnake(prevPosition, newPosition);
@@ -77,9 +82,14 @@ public class SnakeService : MonoBehaviour, IMovable, IDamageable, IGrowable
 
     public void ChangeDirection(Vector2Int direction)
     {
-        if (Vector2.Dot(snakeModel.FacingDirection, direction) != -1)
+        if (isNotBlocked)
         {
-            snakeModel.FacingDirection = direction;
+            if (Vector2.Dot(snakeModel.FacingDirection, direction) != -1)
+            {
+                snakeModel.FacingDirection = direction;
+                isNotBlocked = false;
+            }
+
         }
 
     }

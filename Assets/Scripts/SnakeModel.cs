@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
-using System;
 
 public class SnakeModel
 {
@@ -50,8 +48,5 @@ public class SnakeModel
         _shouldGrowOnNextMove = true;
     }
 
-    private void Grow()
-    {
-
-    }
+    
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 
 public class SnakeService : MonoBehaviour, IMovable, IDamageable, IGrowable
 {
@@ -20,10 +21,13 @@ public class SnakeService : MonoBehaviour, IMovable, IDamageable, IGrowable
     [SerializeField]
     private Tile foodTile;
 
+    public Text scoreUiValue;
+
     private int health = 1;
     private bool isNotBlocked;
 
     private SnakeModel snakeModel;
+    private int score = 0;
 
     private void Start()
     {
@@ -70,6 +74,7 @@ public class SnakeService : MonoBehaviour, IMovable, IDamageable, IGrowable
             } else if (nextTile == foodTile)
             {
                 Grow();
+                UpdateScore(100);
                 foodGenerator.PlaceFood();
             }
             List<Vector2Int> newPosition = snakeModel.MoveForward();
@@ -78,6 +83,12 @@ public class SnakeService : MonoBehaviour, IMovable, IDamageable, IGrowable
         {
             Debug.Log("You DEAD :)");
         }
+    }
+
+    private void UpdateScore(int v)
+    {
+        score += 100;
+        scoreUiValue.text = score.ToString();
     }
 
     public void ChangeDirection(Vector2Int direction)
